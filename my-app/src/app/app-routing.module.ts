@@ -3,14 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { OrderComponent } from './component/order/order.component';
 const routes: Routes = [
+ 
+  {
+    path: 'order',
+    component: OrderComponent
+  },
   {
     path: '**',
     component: AppComponent
   },
-  {
-    path: 'order',
-    component: OrderComponent
-  }
 ];
 
 @NgModule({

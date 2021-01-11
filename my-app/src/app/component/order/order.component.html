@@ -1,14 +1,99 @@
-<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
-        <input nz-input formControlName="email" id="email" />
-      </nz-form-control>
-    </nz-form-item>
-  
-    <nz-form-item nz-row class="register-area">
-      <nz-form-control nzSpan="14" nzOffset="6">
-        <button nz-button nzType="primary">Register</button>
-      </nz-form-control>
-    </nz-form-item>
-  </form>
+
+<nz-layout>
+
+  <nz-header>Header</nz-header>
+
+  <nz-content>
+    <div nz-row>
+      <div nz-col nzSpan="8" nzOffset=8>
+       
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+          <!-- 货品类型 ： 40 50 60 70 80  -->
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="goodsType">货 品</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择要买的货物型号!">      
+              <div nz-row>
+                <div nz-col nzSpan="8" >
+                  <nz-select ngModel="50"  formControlName="goodsType" (ngModelChange)="goodsTypeChange()" >
+                    <nz-option nzValue="40" nzLabel="40cm"></nz-option>
+                    <nz-option nzValue="50" nzLabel="50cm"></nz-option>
+                    <nz-option nzValue="60" nzLabel="60cm"></nz-option>
+                    <nz-option nzValue="70" nzLabel="70cm"></nz-option>
+                    <nz-option nzValue="80" nzLabel="80cm"></nz-option>
+                  </nz-select>
+                </div>
+                <div nz-col nzSpan="8" >
+                  <nz-select ngModel="1"  formControlName="packageType"  (ngModelChange)="packageTypeChange()">
+                    <nz-option nzValue="1" nzLabel="盒装"></nz-option>
+                    <nz-option nzValue="2" nzLabel="散装"></nz-option>
+                  </nz-select>     
+                </div>
+              </div>     
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- 单价： 40->5, 50->6, (60,70)->7, 80->8 元/斤 -->
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="price">单 价</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" >
+              <input nz-input  formControlName="price"  > 元/斤
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- 购买数量： 按公斤数售卖 -->
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="totalNum">购买数量</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" >
+              <input nz-input formControlName="totalNum" (change)=totalNumChange()> {{unitOfQuantity}}
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- 商品总价格 -->
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="transportationFee" >商品总价</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" >
+              <input nz-input formControlName="goodsFee"  > 
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- 运费 -->
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="transportationFee" >运 费</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" >
+              <input nz-input formControlName="transportationFee" > 
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- 总价 -->
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="totalPrice">总 价</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" >
+              <input nz-input formControlName="totalPrice" > 
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- 价格描述：购买数量*单价+运费 -->
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24"  nzFor="totalPriceDes">价格描述：</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" >
+              <input nz-input formControlName="totalPriceDes" type="totalPriceDes" id="totalPriceDes"> 
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-row class="register-area">
+            <nz-form-control nzSpan="14" nzOffset="6">
+              <button nz-button nzType="primary">购买</button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div>
+    </div>
+    
+
+  </nz-content>
+
+  <nz-footer>Footer1</nz-footer>
+
+</nz-layout>
+
+
