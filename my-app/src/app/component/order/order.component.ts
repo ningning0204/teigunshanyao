@@ -13,6 +13,7 @@ export class OrderComponent implements OnInit {
 
   validateForm!: FormGroup;
   unitOfQuantity: string = '盒';
+  haveTransportationFee : boolean = false;
 
   submitForm(): void {
     for (const i in this.validateForm.controls) {
@@ -24,23 +25,30 @@ export class OrderComponent implements OnInit {
   goodsTypeChange(): void{
     console.log("9999"+this.validateForm.controls['goodsType'].value)
     if(this.validateForm.controls['goodsType'].value == 40)
-      this.validateForm.controls['price'].setValue(5);
+      this.validateForm.controls['price'].setValue(this.haveTransportationFee ? 5 : 6.5);
     if(this.validateForm.controls['goodsType'].value == 50)
-      this.validateForm.controls['price'].setValue(6);
+      this.validateForm.controls['price'].setValue(this.haveTransportationFee ? 6 : 7.5);
     if(this.validateForm.controls['goodsType'].value == 60)
-     this.validateForm.controls['price'].setValue(7);
+     this.validateForm.controls['price'].setValue(this.haveTransportationFee ? 7 : 8.5);
     if(this.validateForm.controls['goodsType'].value == 70)
-      this.validateForm.controls['price'].setValue(7);
+      this.validateForm.controls['price'].setValue(this.haveTransportationFee ? 8 : 8.5);
     if(this.validateForm.controls['goodsType'].value == 80)
-      this.validateForm.controls['price'].setValue(8);
+      this.validateForm.controls['price'].setValue(this.haveTransportationFee ? 9 : 9.5);
     console.log( this.validateForm.controls['price'].value)
+    this.totalNumChange();
   }
 
   packageTypeChange():void{
-    if(this.validateForm.controls['packageType'].value == 1)
-      this.unitOfQuantity = '盒';
-    else
-      this.unitOfQuantity = 'kg(公斤)';
+    if(this.validateForm.controls['packageType'].value == 1){
+      this.unitOfQuantity = '盒(每盒8斤,带盒重量)';
+      this.validateForm.controls['totalNum'].setValue(1);
+      //if(!this.haveTransportationFee) this.validateForm.controls['totalPrice'].setValue(this.validateForm.controls['price'].value * 8);
+    }else{
+      this.unitOfQuantity = 'kg,3kg(6斤)起购';
+      this.validateForm.controls['totalNum'].setValue(3);
+     // if(!this.haveTransportationFee) this.validateForm.controls['totalPrice'].setValue(this.validateForm.controls['price'].value * 6);
+    }
+    this.totalNumChange();
   }
   totalNumChange(): void{
     console.log("<><><><><><>totalnumchange"+this.validateForm.controls['totalNum'].value)
@@ -52,18 +60,26 @@ export class OrderComponent implements OnInit {
       totalweight = this.validateForm.controls['totalNum'].value*2;
     }
     //2. 设定商品总价格
-    let goodsTotalPrice = this.validateForm.controls['price'].value * totalweight;
+    let price = this.validateForm.controls['price'].value;
+    let goodsTotalPrice = price * totalweight;
     this.validateForm.controls['goodsFee'].setValue(goodsTotalPrice);
-    //3. 计算运费价格： 货品运费+包装费
-    let goodsTransportationFee = totalweight%2==0 ? totalweight : totalweight+1;   
-    let packageFee = 0;// 小于32斤统一收费： 集装箱6元+多出重量运费2元 = 8元
-    if(totalweight<=32){
-      packageFee = 8;
+    //3. 计算运费价格： 货品运费
+    let goodsTransportationFee = totalweight%2==0 ? totalweight/2*3 : (totalweight+1)/2*3;   
+    // let packageFee = 0;// 小于32斤统一收费： 集装箱6元+多出重量运费2元 = 8元
+    // if(totalweight<=48){
+    //   packageFee = 8;
+    // }else{
+    //   totalweight%32 == 0 ? totalweight/32*8 :  totalweight/32*8+8;
+    // }
+    if(!this.haveTransportationFee){
+      console.log("000000000000"+totalweight+"99999999999"+price)
+      this.validateForm.controls['totalPrice'].setValue(totalweight*price);
     }else{
-      totalweight%32 == 0 ? totalweight/32*8 :  totalweight/32*8+8;
+      this.validateForm.controls['transportationFee'].setValue(goodsTransportationFee);
+      this.validateForm.controls['totalPrice'].setValue(goodsTotalPrice+goodsTransportationFee);
+      this.validateForm.controls['totalPriceDes'].setValue('购买'+totalweight+'斤 * '+price+'元/斤= '+(totalweight*price)+'元 + 运费 '+(goodsTransportationFee)+'元 = '+(goodsTotalPrice+goodsTransportationFee)+'元');
     }
-    this.validateForm.controls['transpototalPricertationFee'].setValue(goodsTransportationFee+packageFee);
-    this.validateForm.controls['totalNum'].setValue(goodsTotalPrice+goodsTransportationFee+packageFee)
+    
     
   }
   
@@ -78,16 +94,9 @@ export class OrderComponent implements OnInit {
       transportationFee: [null, [ Validators.required]],
       totalPrice:[null, [ Validators.required]],
       packageType: [null, [ Validators.required]],
-      totalPriceDes:  [null, [ Validators.required]],
+      totalPriceDes:  ['', [ Validators.required]],
       goodsFee:  [null, [ Validators.required]],
     });
-    this.validateForm.controls['goodsType'].setValue(50);
-    this.validateForm.controls['price'].setValue(6);
-    this.validateForm.controls['totalNum'].setValue(0);
-    this.validateForm.controls['transportationFee'].setValue(0);
-    this.validateForm.controls['totalPrice'].setValue(0);
-    this.validateForm.controls['goodsFee'].setValue(0);
-    this.validateForm.controls['packageType'].setValue(1);
     
   }
 

@@ -8,6 +8,11 @@
       <div nz-col nzSpan="8" nzOffset=8>
        
         <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+          <nz-form-item>
+            <nz-form-control [nzSm]="14" [nzXs]="24" >
+              <span>货物紧张售卖中，支付后无货全额退款</span>
+            </nz-form-control>
+          </nz-form-item>
           <!-- 货品类型 ： 40 50 60 70 80  -->
           <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="goodsType">货 品</nz-form-label>
@@ -49,7 +54,7 @@
           </nz-form-item>
 
           <!-- 商品总价格 -->
-          <nz-form-item>
+          <nz-form-item *ngIf="haveTransportationFee">
             <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="transportationFee" >商品总价</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24" >
               <input nz-input formControlName="goodsFee"  > 
@@ -57,10 +62,10 @@
           </nz-form-item>
 
           <!-- 运费 -->
-          <nz-form-item>
+          <nz-form-item *ngIf="haveTransportationFee">
             <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="transportationFee" >运 费</nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24" >
-              <input nz-input formControlName="transportationFee" > 
+            <nz-form-control [nzSm]="18" [nzXs]="24" >
+              <input nz-input formControlName="transportationFee" > （货品运费每公斤3元）
             </nz-form-control>
           </nz-form-item>
 
@@ -73,10 +78,10 @@
           </nz-form-item>
 
           <!-- 价格描述：购买数量*单价+运费 -->
-          <nz-form-item>
+          <nz-form-item *ngIf="haveTransportationFee">
             <nz-form-label [nzSm]="6" [nzXs]="24"  nzFor="totalPriceDes">价格描述：</nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24" >
-              <input nz-input formControlName="totalPriceDes" type="totalPriceDes" id="totalPriceDes"> 
+            <nz-form-control [nzSm]="18" [nzXs]="24" >
+              <textarea nz-input formControlName="totalPriceDes" > </textarea>
             </nz-form-control>
           </nz-form-item>
 
