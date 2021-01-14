@@ -1,7 +1,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzFormTooltipIcon } from 'ng-zorro-antd/form';
+import { HttpService } from '../../core/http.service';
+import { HttpParams, HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class OrderComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
+  
   }
 
   goodsTypeChange(): void{
@@ -50,6 +52,7 @@ export class OrderComponent implements OnInit {
     }
     this.totalNumChange();
   }
+
   totalNumChange(): void{
     console.log("<><><><><><>totalnumchange"+this.validateForm.controls['totalNum'].value)
     //1. 计算商品总重量
@@ -83,7 +86,7 @@ export class OrderComponent implements OnInit {
     
   }
   
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,  private httpService: HttpService,) {
   }
 
   ngOnInit(): void {
